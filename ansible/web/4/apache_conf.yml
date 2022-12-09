@@ -1,0 +1,32 @@
+- name: Lancer apache au démarrage  
+  service: 
+    name: apache2 
+    state: started
+    enabled: true
+    
+- name: Créer la configuration pour le site www.numeration.com
+  file:
+    path: /etc/apache2/sites-available/www.numeration.com.conf
+    state: touch
+    
+- name: Ecrire dans le fichier
+  copy: 
+    src: ./setup/www.numeration.com.conf
+    dest: /etc/apache2/sites-available/www.numeration.com.conf
+  become: yes
+    
+- name: Activer le site
+  command: a2ensite www.numeration.com
+
+- name: Activer la réécriture des URL
+  command: a2enmod rewrite
+
+- name: Désactiver la page de base d'Apache
+  command: a2dissite 000-default
+
+- name: Configurer le nom de domaine local www.numeration.com dans le fichier hosts
+  lineinfile:
+    dest: /etc/hosts
+    insertafter: 'localhost'
+    line: '127.0.0.1       www.numeration.com'
+    state: present

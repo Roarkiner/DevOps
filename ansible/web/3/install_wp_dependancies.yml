@@ -1,0 +1,9 @@
+- name: ajouter un repository pour la dépendance php-bcmath
+  apt_repository: 
+    repo: "ppa:ondrej/php"
+    state: present
+
+- name: Installer les dépendances nécessaires au fonctionnement de wordpress
+  apt:
+    name: "apache2, ghostscript, libapache2-mod-php, php, php-bcmath, php-mysql, php-curl, php-imagick, php-intl, php-json, php-mbstring, php-xml, php-zip, mysql-client, acl"
+    state: latest

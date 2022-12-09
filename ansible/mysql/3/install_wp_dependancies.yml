@@ -1,0 +1,4 @@
+- name: Installer les dépendances nécessaires au fonctionnement de wordpress
+  apt:
+    name: "mysql-server, mysql-client, php, php-mysql, python3, python3-pymysql"
+    state: latest

@@ -1,0 +1,3 @@
+- name: Enregistrer le résultat de wget www.numeration.com dans le dossier partagé (../../../vagrant/web_synced)
+  command: wget -P /usr/local/synced_dir/ www.numeration.com
+  

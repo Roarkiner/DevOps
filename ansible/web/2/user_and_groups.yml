@@ -1,0 +1,30 @@
+- name: Vérifier que le groupe devops existe, si non le crée
+  group:
+    name: devops
+    state: present
+    
+- name: Sudo sans mot de passe pour le groupe "devops"
+  copy:
+    content: '%devops ALL=(ALL:ALL) NOPASSWD:ALL'
+    dest: /etc/sudoers.d/devops_nopasswd
+    mode: 0440
+    validate: 'visudo -cf %s'
+    
+- name: Créer l'utilisateur web
+  user:
+    name: web
+    shell: /bin/bash
+    password: $6$salt$wNKVlc7RrE17txVbfacu1V/9U6erN5BrTygCp84.dABIAjIc3M6WphqanZcvH1RT1oHAkIn/HAZLR6vLLbU0G1
+    
+- name: Assigner web au groupe devops
+  user:
+    name: web
+    groups: devops
+    append: yes
+    
+- name: Créer un dossier /var/www
+  file:
+    path: /var/www
+    state: directory
+    mode: 0775
+    group: devops

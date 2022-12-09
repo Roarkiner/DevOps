@@ -1,0 +1,1 @@
+{"virtualbox":{"/usr/local/synced_dir/":{"guestpath":"/usr/local/synced_dir","hostpath":"/home/roarkiner-admin/DevOps/vagrant/web_synced","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/roarkiner-admin/DevOps/vagrant","disabled":false,"__vagrantfile":true}}}

@@ -1,0 +1,61 @@
+- name: Lance le service mysql  
+  shell: "service mysql start"  
+
+- name: Lance Mysql au démarrage  
+  service: 
+    name: mysql
+    state: started 
+    enabled: true
+    
+- name: Créer la base de donnée
+  mysql_db: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: wordpress
+    state: present
+    login_user: root
+    login_password: ""
+
+- name: Create mysql user
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: wordpress
+    password: password
+    priv: "*.*:ALL"
+    login_user: root
+    login_password: ""
+    
+- name: Create mysql user
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: wordpress_remote
+    password: password
+    host: 192.168.56.10
+    priv: "*.*:ALL"
+    login_user: root
+    login_password: ""
+
+- name: Configurer mysql pour accepter les connexions à distance
+  lineinfile:
+    state: present
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regex: "^bind-address"
+    line: "bind-address = 192.168.56.11"
+
+- name: Copie le script de setup de la base de donnée dans la machine virtuelle
+  copy: 
+    src: ./wp_db_dump.sql
+    dest: /var/tmp/wp_db_dump.sql
+    group: root
+    owner: root
+    mode: 0444
+    
+- name: Execute le script sql pour créer la base de données de worpdress
+  shell: "sudo mysql wordpress < /var/tmp/wp_db_dump.sql"
+  
+- name: Supprime le script de la VM
+  file:
+    path: /var/tmp/wp_db_dump.sql
+    state: absent
+
+- name: Lance le service mysql  
+  shell: "service mysql restart"

@@ -1,0 +1,12 @@
+- name: Provisionner VM
+  hosts: all
+  become: yes
+  become_method: sudo
+  remote_user: ubuntu
+  tasks:
+    - import_tasks: 2/user_and_groups.yml
+    #- import_tasks: ssh_auth/ssh_auth.yml
+    - import_tasks: 3/install_wp_dependancies.yml
+    - import_tasks: 4/apache_conf.yml
+    - import_tasks: 4/wp_file_deployment.yml
+    - import_tasks: 4/wget_website.yml
